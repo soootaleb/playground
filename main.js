@@ -95,11 +95,14 @@ function bresenham(x1, y1, x2, y2) {
  * @param {*} y1 Y position of the starting point
  * @param {*} angle The direction of the ray
  */
-function bresenham_angle(x1, y1, angle) {
+function bresenham_angle(x1, y1, degres) {
 
-    max = Math.max(LINES, COLUMNS)
-    x2 = max * Math.tan(angle)
-    y2 = max
+    const angle = Math.PI * (degres / 180)
+
+    diag = Math.sqrt(LINES ** 2 + COLUMNS ** 2)
+
+    x2 = diag * Math.cos(angle)
+    y2 = diag * Math.sin(angle)
 
     bresenham(x1, y1, x2, y2)
 }
