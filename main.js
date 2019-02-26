@@ -47,7 +47,7 @@ function exists(x, y) {
  * @param {*} x 
  * @param {*} y 
  */
-function visit(x, y) {
+function visit(x, y, color = 'red') {
 
     if (document.getElementById(pixelId(x, y)).classList.contains('visited')) {
         let item = document.createElement('li')
@@ -55,7 +55,9 @@ function visit(x, y) {
         document.getElementById('errors').appendChild(item)
         throw Error(`The pixel (${x},${y}) is already visited`)
     } else {
-        document.getElementById(pixelId(x, y)).classList.add('visited')
+        pixel = document.getElementById(pixelId(x, y))
+        pixel.classList.add('visited')
+        pixel.style.backgroundColor = color
     }
 }
 
@@ -133,6 +135,14 @@ function clear() {
     }
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 window.onload = (event) => {
     
@@ -150,8 +160,9 @@ window.onload = (event) => {
         segments = bresenham_angle(0, 0, event.target.value)
 
         for (let index = 1; index < COLUMNS; index++) {
+            rayColor = getRandomColor()
             segments.forEach(pixel => {
-                visit(pixel[0] + index, pixel[1])
+                visit(pixel[0] + index, pixel[1], rayColor)
             });
         }
         
