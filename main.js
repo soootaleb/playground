@@ -48,7 +48,15 @@ function exists(x, y) {
  * @param {*} y 
  */
 function visit(x, y) {
-    document.getElementById(pixelId(x, y)).classList.add('visited')
+
+    if (document.getElementById(pixelId(x, y)).classList.contains('visited')) {
+        let item = document.createElement('li')
+        item.textContent = `The pixel (${x},${y}) is already visited`
+        document.getElementById('errors').appendChild(item)
+        throw Error(`The pixel (${x},${y}) is already visited`)
+    } else {
+        document.getElementById(pixelId(x, y)).classList.add('visited')
+    }
 }
 
 /**
