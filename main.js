@@ -1,6 +1,9 @@
 const LINES = 50;
 const COLUMNS = 80;
 
+/**
+ * Add the HTML elements (pixels)
+ */
 function initTable() {
     let root = document.getElementById('root')
 
@@ -20,10 +23,32 @@ function initTable() {
     }
 }
 
+/**
+ * Verifies that a pixel exists in the table
+ * @param {*} x 
+ * @param {*} y 
+ */
+function exists(x, y) {
+    return Boolean(document.getElementById(x.toString() + y.toString()))
+}
+
+/**
+ * Update a pixel class to set it VISITED (red)
+ * @param {*} x 
+ * @param {*} y 
+ */
 function visit(x, y) {
     document.getElementById(x.toString() + y.toString()).classList.add('visited')
 }
 
+/**
+ * Applies bresengam algorithm from a starting
+ * position to a destination
+ * @param {*} x1 
+ * @param {*} y1 
+ * @param {*} x2 
+ * @param {*} y2 
+ */
 function bresenham(x1, y1, x2, y2) {
     let delta_x = x2 - x1
     let delta_y = y2 - y1
@@ -39,7 +64,11 @@ function bresenham(x1, y1, x2, y2) {
 
     for (let x = x1; x < x2; x++) {
         
-        visit(x, y)
+        if (exists(x, y)) {
+            visit(x, y)
+        } else {
+            return;
+        }
 
         error += err_x
         if (error >= 0.5) {
@@ -47,8 +76,32 @@ function bresenham(x1, y1, x2, y2) {
             error += err_y   
         }
     }
-        
-        
+}
+
+/**
+ * Applies the BRESENHAM algorithm from a starting point
+ * to a direction set by an angle (in degres)
+ * @param {*} x1 X position of the starting point
+ * @param {*} y1 Y position of the starting point
+ * @param {*} angle The direction of the ray
+ */
+function bresenham_angle(x1, y1, angle) {
+
+    x2 = 1000
+
+    hyp = x2 / Math.cos(angle)
+    y2 = hyp * Math.sin(angle)
+
+    bresenham(x1, y1, x2, y2)
+}
+
+/**
+ * Set all the pixels to NOT VISITED (blue), to refresh the table
+ */
+function clear() {
+    for (const element of document.getElementsByClassName('pixel')) {
+        element.classList.remove('visited')
+    }
 }
 
 
@@ -56,5 +109,12 @@ window.onload = (event) => {
     
     initTable()
 
-    bresenham(0, 0, COLUMNS, LINES)
+    /**
+     * Added a range input to move in order to see the red ray applied
+     * on the table & test the scaning algorithm(s)
+     */
+    document.getElementById('angle').addEventListener('input', (event) => {
+        clear()
+        bresenham_angle(0, 0, event.target.value)
+    })
 }
