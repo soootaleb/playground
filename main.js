@@ -1,6 +1,12 @@
 const LINES = 50;
 const COLUMNS = 50;
 
+/**
+ * Generating an HTML pixel ID based on the X / Y positions
+ * /!\ the dash is necessary to avoid symatric duplicates (eg [12, 3] & [1, 23 ])
+ * @param {*} x 
+ * @param {*} y 
+ */
 function pixelId(x, y) {
     return x.toString() + '-' + y.toString()
 }
