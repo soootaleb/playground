@@ -140,6 +140,9 @@ window.onload = (event) => {
 
         document.getElementById('display').textContent = event.target.value + '°';
 
-        bresenham_angle(0, 0, event.target.value)
+        for (let index = 0; index < COLUMNS; index++) {
+            bresenham_angle(index, 0, event.target.value)
+        }
+        
     })
 }
