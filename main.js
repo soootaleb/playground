@@ -163,7 +163,14 @@ window.onload = (event) => {
         for (let index = 1; index < COLUMNS; index++) {
             rayColor = getRandomColor()
             segments.forEach(pixel => {
-                visit(pixel[0] + index, pixel[1], rayColor)
+                if (exists(pixel[0] + index, pixel[1])) visit(pixel[0] + index, pixel[1], rayColor)
+            });
+        }
+
+        for (let index = 1; index < LINES; index++) {
+            rayColor = getRandomColor()
+            segments.forEach(pixel => {
+                if (exists(pixel[0] - index, pixel[1])) visit(pixel[0] - index, pixel[1], rayColor)
             });
         }
         
