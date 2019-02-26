@@ -68,6 +68,8 @@ function visit(x, y) {
  * @param {*} y2 
  */
 function bresenham(x1, y1, x2, y2) {
+    segments = []
+
     let delta_x = x2 - x1
     let delta_y = y2 - y1
     
@@ -91,11 +93,16 @@ function bresenham(x1, y1, x2, y2) {
             err_y--;
         }
 
-        if (exists(x, y)) visit(x, y)
+        if (exists(x, y)) {
+            visit(x, y)
+            segments.push([x, y])
+        } 
 
         err_x += const_err_x
         err_y += const_err_y
     }
+
+    return segments
 }
 
 /**
@@ -114,7 +121,7 @@ function bresenham_angle(x1, y1, degres) {
     x2 = diag * Math.cos(angle)
     y2 = diag * Math.sin(angle)
 
-    bresenham(x1, y1, x2, y2)
+    return bresenham(x1, y1, x2, y2)
 }
 
 /**
@@ -140,8 +147,12 @@ window.onload = (event) => {
 
         document.getElementById('display').textContent = event.target.value + '°';
 
-        for (let index = 0; index < COLUMNS; index++) {
-            bresenham_angle(index, 0, event.target.value)
+        segments = bresenham_angle(0, 0, event.target.value)
+
+        for (let index = 1; index < COLUMNS; index++) {
+            segments.forEach(pixel => {
+                visit(pixel[0] + index, pixel[1])
+            });
         }
         
     })
