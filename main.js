@@ -1,5 +1,9 @@
 const LINES = 50;
-const COLUMNS = 80;
+const COLUMNS = 50;
+
+function pixelId(x, y) {
+    return x.toString() + '-' + y.toString()
+}
 
 /**
  * Add the HTML elements (pixels)
@@ -14,7 +18,7 @@ function initTable() {
         for (let x = 0; x < COLUMNS; x++) {
             let pixel = document.createElement('div')
             pixel.setAttribute('class', 'pixel')
-            pixel.setAttribute('id', x.toString() + y.toString())
+            pixel.setAttribute('id', pixelId(x, y))
 
             line.appendChild(pixel)
         }
@@ -29,7 +33,7 @@ function initTable() {
  * @param {*} y 
  */
 function exists(x, y) {
-    return Boolean(document.getElementById(x.toString() + y.toString()))
+    return Boolean(document.getElementById(pixelId(x, y)))
 }
 
 /**
@@ -38,7 +42,7 @@ function exists(x, y) {
  * @param {*} y 
  */
 function visit(x, y) {
-    document.getElementById(x.toString() + y.toString()).classList.add('visited')
+    document.getElementById(pixelId(x, y)).classList.add('visited')
 }
 
 /**
@@ -87,12 +91,9 @@ function bresenham(x1, y1, x2, y2) {
  */
 function bresenham_angle(x1, y1, angle) {
 
-    x2 = 1000
+    max = Math.max(LINES, COLUMNS)
 
-    hyp = x2 / Math.cos(angle)
-    y2 = hyp * Math.sin(angle)
-
-    bresenham(x1, y1, x2, y2)
+    bresenham(x1, y1, max * Math.tan(angle), max)
 }
 
 /**
