@@ -98,8 +98,10 @@ function bresenham(x1, y1, x2, y2) {
 function bresenham_angle(x1, y1, angle) {
 
     max = Math.max(LINES, COLUMNS)
+    x2 = max * Math.tan(angle)
+    y2 = max
 
-    bresenham(x1, y1, max * Math.tan(angle), max)
+    bresenham(x1, y1, x2, y2)
 }
 
 /**
