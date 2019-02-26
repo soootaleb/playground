@@ -47,7 +47,7 @@ function exists(x, y) {
  * @param {*} x 
  * @param {*} y 
  */
-function visit(x, y) {
+function visit(x, y, color) {
 
     if (document.getElementById(pixelId(x, y)).classList.contains('visited')) {
         let item = document.createElement('li')
@@ -55,7 +55,9 @@ function visit(x, y) {
         document.getElementById('errors').appendChild(item)
         throw Error(`The pixel (${x},${y}) is already visited`)
     } else {
-        document.getElementById(pixelId(x, y)).classList.add('visited')
+        pixel = document.getElementById(pixelId(x, y))
+        pixel.classList.add('visited')
+        pixel.style.backgroundColor = color
     }
 }
 
@@ -68,6 +70,8 @@ function visit(x, y) {
  * @param {*} y2 
  */
 function bresenham(x1, y1, x2, y2) {
+    segments = []
+
     let delta_x = x2 - x1
     let delta_y = y2 - y1
     
@@ -91,11 +95,16 @@ function bresenham(x1, y1, x2, y2) {
             err_y--;
         }
 
-        if (exists(x, y)) visit(x, y)
+        if (exists(x, y)) {
+            visit(x, y, 'red')
+            segments.push([x, y])
+        } 
 
         err_x += const_err_x
         err_y += const_err_y
     }
+
+    return segments
 }
 
 /**
@@ -114,7 +123,7 @@ function bresenham_angle(x1, y1, degres) {
     x2 = diag * Math.cos(angle)
     y2 = diag * Math.sin(angle)
 
-    bresenham(x1, y1, x2, y2)
+    return bresenham(x1, y1, x2, y2)
 }
 
 /**
@@ -122,10 +131,19 @@ function bresenham_angle(x1, y1, degres) {
  */
 function clear() {
     for (const element of document.getElementsByClassName('pixel')) {
+        element.style.backgroundColor = 'blue'
         element.classList.remove('visited')
     }
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 window.onload = (event) => {
     
@@ -138,8 +156,20 @@ window.onload = (event) => {
     document.getElementById('angle').addEventListener('input', (event) => {
         clear()
 
-        document.getElementById('display').textContent = event.target.value + '°';
+        angle = event.target.value
 
-        bresenham_angle(0, 0, event.target.value)
+        document.getElementById('display').textContent = angle + '°';
+
+        segments = bresenham_angle(0, 0, angle)
+
+        for (let index = 1; index < COLUMNS; index++) {
+            rayColor = getRandomColor()
+            segments.forEach(pixel => {
+                newPixelRight = angle < 45 ? [pixel[0] + index, pixel[1]] : [pixel[0], pixel[1] + index]
+                newPixelLeft = angle < 45 ? [pixel[0] - index, pixel[1]] : [pixel[0], pixel[1] - index]
+                if (exists(...newPixelRight)) visit(...newPixelRight, rayColor)
+                if (exists(...newPixelLeft)) visit(...newPixelLeft, rayColor)
+            });
+        }
     })
 }
