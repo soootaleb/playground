@@ -63,23 +63,30 @@ function bresenham(x1, y1, x2, y2) {
     let delta_x = x2 - x1
     let delta_y = y2 - y1
     
-    err_x = delta_x === 0 ? 0 : delta_y / delta_x;
+    const_err_x = delta_x === 0 ? 0 : delta_y / delta_x;
+    const_err_y = delta_y === 0 ? 0 : delta_x / delta_y;
 
+    x = x1
     y = y1
-    error = 0.0
+    err_x = 0.0
+    err_y = 0.0
     
-    for (let x = x1; x < x2; x++) {
+    while (x < COLUMNS || y < LINES) {
+
+        if (err_x >= 0.5) {
+            x++;
+            err_x--;
+        }
         
-        if (exists(x, y)) {
-            visit(x, y)
+        if (err_y >= 0.5) {
+            y++;
+            err_y--;
         }
 
-        error += err_x
+        if (exists(x, y)) visit(x, y)
 
-        if (error >= 0.5) {
-            y += 1
-            error--;
-        }
+        err_x += const_err_x
+        err_y += const_err_y
     }
 }
 
