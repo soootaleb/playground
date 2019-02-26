@@ -96,7 +96,7 @@ function bresenham(x1, y1, x2, y2) {
         }
 
         if (exists(x, y)) {
-            visit(x, y)
+            visit(x, y, 'red')
             segments.push([x, y])
         } 
 
