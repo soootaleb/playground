@@ -156,23 +156,21 @@ window.onload = (event) => {
     document.getElementById('angle').addEventListener('input', (event) => {
         clear()
 
-        document.getElementById('display').textContent = event.target.value + '°';
+        angle = event.target.value
 
-        segments = bresenham_angle(0, 0, event.target.value)
+        document.getElementById('display').textContent = angle + '°';
+
+        segments = bresenham_angle(0, 0, angle)
+
 
         for (let index = 1; index < COLUMNS; index++) {
             rayColor = getRandomColor()
             segments.forEach(pixel => {
-                if (exists(pixel[0] + index, pixel[1])) visit(pixel[0] + index, pixel[1], rayColor)
+                newPixelRight = angle < 45 ? [pixel[0] + index, pixel[1]] : [pixel[0], pixel[1] + index]
+                newPixelLeft = angle < 45 ? [pixel[0] - index, pixel[1]] : [pixel[0], pixel[1] - index]
+                if (exists(...newPixelRight)) visit(...newPixelRight, rayColor)
+                if (exists(...newPixelLeft)) visit(...newPixelLeft, rayColor)
             });
         }
-
-        for (let index = 1; index < LINES; index++) {
-            rayColor = getRandomColor()
-            segments.forEach(pixel => {
-                if (exists(pixel[0] - index, pixel[1])) visit(pixel[0] - index, pixel[1], rayColor)
-            });
-        }
-        
     })
 }
