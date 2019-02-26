@@ -47,7 +47,7 @@ function exists(x, y) {
  * @param {*} x 
  * @param {*} y 
  */
-function visit(x, y, color = 'red') {
+function visit(x, y, color) {
 
     if (document.getElementById(pixelId(x, y)).classList.contains('visited')) {
         let item = document.createElement('li')
@@ -131,6 +131,7 @@ function bresenham_angle(x1, y1, degres) {
  */
 function clear() {
     for (const element of document.getElementsByClassName('pixel')) {
+        element.style.backgroundColor = 'blue'
         element.classList.remove('visited')
     }
 }
