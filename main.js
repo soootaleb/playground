@@ -115,6 +115,9 @@ window.onload = (event) => {
      */
     document.getElementById('angle').addEventListener('input', (event) => {
         clear()
+
+        document.getElementById('display').textContent = event.target.value + '°';
+
         bresenham_angle(0, 0, event.target.value)
     })
 }
