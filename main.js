@@ -62,28 +62,23 @@ function visit(x, y) {
 function bresenham(x1, y1, x2, y2) {
     let delta_x = x2 - x1
     let delta_y = y2 - y1
+    
+    err_x = delta_x === 0 ? 0 : delta_y / delta_x;
+
     y = y1
     error = 0.0
-    if(delta_x != 0) {
-        err_x = delta_y / delta_x
-    } else {
-        err_x = 0
-    }
-
-    let err_y = -1
-
+    
     for (let x = x1; x < x2; x++) {
         
         if (exists(x, y)) {
             visit(x, y)
-        } else {
-            return;
         }
 
         error += err_x
+
         if (error >= 0.5) {
             y += 1
-            error += err_y   
+            error--;
         }
     }
 }
@@ -100,7 +95,7 @@ function bresenham_angle(x1, y1, degres) {
     const angle = Math.PI * (degres / 180)
 
     diag = Math.sqrt(LINES ** 2 + COLUMNS ** 2)
-
+    
     x2 = diag * Math.cos(angle)
     y2 = diag * Math.sin(angle)
 
